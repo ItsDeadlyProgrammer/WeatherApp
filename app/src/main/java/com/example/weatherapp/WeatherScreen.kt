@@ -37,6 +37,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.google.android.gms.location.LocationServices
 
 @SuppressLint("MissingPermission")
@@ -68,14 +73,14 @@ fun WeatherScreen(authViewModel: AuthViewModel, viewModel: WeatherViewModel) {
         }
     }
 
+    val gradient = Brush.verticalGradient(
+        colors = listOf(Color(0xFFFFE29F), Color(0xFFFFA07A), Color(0xFF5B86E5))
+    )
+
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFF74ebd5), Color(0xFFACB6E5))
-                )
-            )
+            .background(gradient)
             .padding(16.dp)
     ) {
         Column(
@@ -91,7 +96,7 @@ fun WeatherScreen(authViewModel: AuthViewModel, viewModel: WeatherViewModel) {
                     modifier = Modifier.weight(1f)
                 )
                 Spacer(Modifier.width(8.dp))
-                Button(onClick = { viewModel.getWeatherByCity(cityInput) }) {
+                Button(onClick = { viewModel.getWeatherByCity(cityInput) }, Modifier.padding(top=10.dp)) {
                     Text("Search")
                 }
             }
@@ -99,13 +104,16 @@ fun WeatherScreen(authViewModel: AuthViewModel, viewModel: WeatherViewModel) {
             Spacer(Modifier.height(24.dp))
 
             weather?.let {
-                val iconRes = when (it.weather.firstOrNull()?.main?.lowercase()) {
-                    "clear" -> R.drawable.sunny
-                    "clouds" -> R.drawable.cloudy
-                    "rain" -> R.drawable.rainy
-                    "snow" -> R.drawable.snowy
-                    else -> R.drawable.cloudy
+                val animationRes = when (it.weather.firstOrNull()?.main?.lowercase()) {
+                    "clear" -> R.raw.sunny
+                    "clouds" -> R.raw.cloudy
+                    "rain" -> R.raw.rainy
+                    "snow" -> R.raw.snowy
+                    else -> R.raw.sunny
                 }
+
+                val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animationRes))
+                val progress by animateLottieCompositionAsState(composition, iterations = LottieConstants.IterateForever)
 
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -114,11 +122,12 @@ fun WeatherScreen(authViewModel: AuthViewModel, viewModel: WeatherViewModel) {
                         .background(Color.White.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
                         .padding(24.dp)
                 ) {
-                    Image(
-                        painter = painterResource(id = iconRes),
-                        contentDescription = "Weather Icon",
-                        modifier = Modifier.height(100.dp)
+                    LottieAnimation(
+                        composition = composition,
+                        progress = { progress },
+                        modifier = Modifier.height(140.dp)
                     )
+
                     Spacer(modifier = Modifier.height(16.dp))
                     Text("City: ${it.name}", fontSize = 22.sp)
                     Text("Temperature: ${it.main.temp} °C", fontSize = 18.sp)
@@ -137,5 +146,3 @@ fun WeatherScreen(authViewModel: AuthViewModel, viewModel: WeatherViewModel) {
         }
     }
 }
-
-

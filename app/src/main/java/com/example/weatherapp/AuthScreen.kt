@@ -1,15 +1,25 @@
 package com.example.weatherapp
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.ImeOptions
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,17 +38,36 @@ fun AuthScreen(authViewModel: AuthViewModel, onSuccess: () -> Unit) {
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFF00C6FF), Color(0xFF0072FF))
+                    colors = listOf(
+                        Color(0xFFFFE29F),
+                        Color(0xFFFFA07A),
+                        Color(0xFF5B86E5)
+                    )
                 )
             ),
         contentAlignment = Alignment.Center
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.splash),
+            contentDescription = "Sunrise",
+            modifier = Modifier
+                .size(200.dp)
+                .align(Alignment.TopCenter)
+                .offset(y = (30).dp)
+        )
         Card(
             shape = RoundedCornerShape(24.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(containerColor = Color(0xEAFFDF59)),
             modifier = Modifier
-                .padding(24.dp)
+                .padding(top = 60.dp)
                 .fillMaxWidth()
+                .padding(horizontal = 24.dp)
+                .graphicsLayer {
+                    alpha = 0.95f
+                    shadowElevation = 12f
+                    shape = RoundedCornerShape(24.dp)
+                    clip = true
+                }
         ) {
             Column(
                 modifier = Modifier
@@ -51,13 +80,15 @@ fun AuthScreen(authViewModel: AuthViewModel, onSuccess: () -> Unit) {
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF0072FF),
-                    modifier = Modifier.padding(bottom = 16.dp)
+                    modifier = Modifier.padding(top = 40.dp, bottom = 16.dp)
                 )
 
                 OutlinedTextField(
                     value = email,
                     onValueChange = { email = it },
                     label = { Text("Email") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email, imeAction = ImeAction.Done),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -67,6 +98,8 @@ fun AuthScreen(authViewModel: AuthViewModel, onSuccess: () -> Unit) {
                     value = password,
                     onValueChange = { password = it },
                     label = { Text("Password") },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password, imeAction = ImeAction.Done),
                     visualTransformation = PasswordVisualTransformation(),
                     modifier = Modifier.fillMaxWidth()
                 )
