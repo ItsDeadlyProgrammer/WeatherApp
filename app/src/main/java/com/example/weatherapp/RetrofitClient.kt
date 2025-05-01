@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    const val API_KEY = "4fcc402a6b69fba76d60c264a40ab0a0"
+    const val API_KEY = "YOUR_API_KEY"
 
     val api: ApiService by lazy {
         Retrofit.Builder()
