@@ -25,8 +25,8 @@ Welcome to **WeatherApp** — a beginner-friendly Android application built with
 
 ## 🧑‍💻 Author
 
-**Name:** Harshvardhan Singh 
-**GitHub:** [@ItsDeadlyProgrammer] (https://github.com/ItsDeadlyProgrammer)
+**Harshvardhan Singh**  
+[![GitHub](https://img.shields.io/badge/GitHub-ItsDeadlyProgrammer-blue)](https://github.com/ItsDeadlyProgrammer)  
 
 ## 📦 Setup Instructions
 
